@@ -38,10 +38,7 @@ contract FixedPointHarness {
     uint256 _b,
     uint256 _decimals
   ) external pure returns (uint256) {
-    uint256 a = _a * 10**(27 - _decimals);
-    uint256 b = _b * 10**(27 - _decimals);
-    uint256 c = (a * b) / 10**(54 - _decimals);
-    return c;
+    return (_a * _b) / 1e18;
   }
 
   function testSub(uint256 _a, uint256 _b) external pure returns (uint256) {

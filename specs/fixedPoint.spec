@@ -34,14 +34,13 @@ rule testSubtraction(uint256 a, uint256 b)
 description "test subtraction" 
 {   
     uint256 c = sinvoke testSub(a, b);
-
     assert (a >= b && a - b == c) || (b - a == c), "failed subtraction test";
 }
 
-// rule testMultiplication(uint256 a, uint256 b)
-// description "test multiplication" 
-// {
-//     uint256 c = sinvoke testMul(a, b, 18);
-//     uint256 expected = sinvoke expectedMul(a, b, 18);
-//     assert expected == c, "failed multiplication test";
-// }
+rule testMultiplication(uint256 a, uint256 b)
+description "test multiplication" 
+{   
+    uint256 c = sinvoke testMul(a, b, 18);
+    uint256 expected = invoke expectedMul(a, b, 18);
+    assert c <= expected, "failed multiplication test";
+}
