@@ -8,5 +8,5 @@ gasReporterOutput.json
 .infuraKey
 .certora_build.json
 .certora_verify.json
-.certora_config/
-.last_confs/
+.certora_config
+.last_confs
