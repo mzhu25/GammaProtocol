@@ -15,7 +15,6 @@ contract FixedPointHarness {
   using FixedPointInt256 for FixedPointInt256.FixedPointInt;
 
   function expectedAdd(uint256 _a, uint256 _b) external pure returns (uint256) {
-    require(_a < 1000 && _b < 1000);
     uint256 c = ((_a * (1e9)) + (_b * (1e9))) / (1e9);
     return c;
   }
