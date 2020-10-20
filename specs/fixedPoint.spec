@@ -3,7 +3,6 @@ methods {
     testSub (uint256, uint256) returns uint256 envfree
     testMul (uint256, uint256, uint256) returns uint256 envfree
     expectedAdd (uint256, uint256) returns uint256 envfree
-    expectedMul (uint256, uint256, uint256) returns uint256 envfree
     testFPI (uint256) returns uint256 envfree
 }
 
@@ -37,10 +36,12 @@ description "test subtraction"
     assert (a >= b && a - b == c) || (b - a == c), "failed subtraction test";
 }
 
+// solved with cvc4
 rule testMultiplication(uint256 a, uint256 b)
 description "test multiplication" 
 {   
     uint256 c = sinvoke testMul(a, b, 18);
-    uint256 expected = invoke expectedMul(a, b, 18);
+    //uint256 expected = sinvoke expectedMul(a, b, 18);
+    mathint expected = a*b/1000000000000000000;
     assert c <= expected, "failed multiplication test";
 }
