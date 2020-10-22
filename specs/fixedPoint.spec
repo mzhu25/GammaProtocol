@@ -29,11 +29,19 @@ description "test subtraction"
     assert (a >= b && a - b == c) || (b - a == c), "failed subtraction test";
 }
 
-rule testMultiplication(uint256 a, uint256 b)
+rule testMultiplicationWithRequire(uint256 a, uint256 b)
 description "test multiplication" 
 {   
     uint256 c = sinvoke testMul(a, b, 18);
     mathint expected = (a * b) / 1000000000000000000;
     require(a*b*2000000000000000000 < MAXINT());
+    assert c == expected, "failed multiplication test";
+}
+
+rule testMultiplicationWithoutRequire(uint256 a, uint256 b)
+description "test multiplication" 
+{   
+    uint256 c = sinvoke testMul(a, b, 18);
+    mathint expected = (a * b) / 1000000000000000000;
     assert c == expected, "failed multiplication test";
 }
