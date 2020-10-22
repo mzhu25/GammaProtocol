@@ -32,9 +32,8 @@ description "test subtraction"
 rule testMultiplication(uint256 a, uint256 b)
 description "test multiplication" 
 {   
-    sinvoke testMulOverflow( a, b, 18);
     uint256 c = sinvoke testMul(a, b, 18);
     mathint expected = (a * b) / 1000000000000000000;
-    
+    require(a*b*2000000000000000000 < MAXINT());
     assert c == expected, "failed multiplication test";
 }

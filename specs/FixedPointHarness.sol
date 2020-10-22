@@ -6,6 +6,7 @@ pragma solidity 0.6.10;
 pragma experimental ABIEncoderV2;
 
 import '../contracts/libs/FixedPointInt256.sol';
+import '../contracts/packages/oz/SafeMath.sol';
 
 /**
  * @author Opyn Team
@@ -13,6 +14,7 @@ import '../contracts/libs/FixedPointInt256.sol';
  */
 contract FixedPointHarness {
   using FixedPointInt256 for FixedPointInt256.FixedPointInt;
+  using SafeMath for uint256;
 
   function testFPI(uint256 _a) external pure returns (uint256) {
     FixedPointInt256.FixedPointInt memory a = FixedPointInt256.fromScaledUint(_a, 18);
@@ -60,12 +62,10 @@ contract FixedPointHarness {
     uint256 _b,
     uint256 _decimals
   ) external pure returns (bool) {
-    uint256 ascaled = _a * 10**(27 - _decimals);
-    uint256 bscaled = _b * 10**(27 - _decimals);
-
-    require(ascaled / 10**(27 - _decimals) == _a);
-    require(bscaled / 10**(27 - _decimals) == _b);
-    require((ascaled * bscaled) / ascaled == bscaled);
+    uint256 ascaled = _a.mul(10**(27 - _decimals));
+    uint256 bscaled = _b.mul(10**(27 - _decimals));
+    int256 result = int256(ascaled.mul(bscaled));
+    require(result >= 0);
 
     return true;
   }
