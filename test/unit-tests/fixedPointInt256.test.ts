@@ -48,6 +48,24 @@ contract('FixedPointInt256 lib', () => {
       assert.equal((await lib.testMul(a, b)).toString(), expectedResult.toString(), 'multiplication result mismatch')
     })
 
+    it('Passes certora counterexample', async () => {
+      const _a = new BigNumber(1)
+      const _b = new BigNumber(0x9392ee8e921d5d073aff322e62439fcf32d9a7188accc0000)
+      const E9 = new BigNumber(10 ** 9)
+
+      const ascaled = _a.multipliedBy(E9)
+      const bscaled = _b.multipliedBy(E9)
+
+      const a = await lib.testFromUnscaledInt(ascaled)
+      const b = await lib.testFromUnscaledInt(bscaled)
+
+      const expectedResult = ascaled.multipliedBy(bscaled)
+      // const product = await lib.testFromUnscaledInt(expectedResult)
+      const product = await lib.testMul(a, b)
+      assert.equal(product.toString(), expectedResult.toString())
+      // assert.equal(product.toString(), expectedResult.toString(), 'multiplication result mismatch')
+    })
+
     it('Should return 10 for -2 * -5', async () => {
       const a = await lib.testFromUnscaledInt(new BigNumber(-2))
       const b = await lib.testFromUnscaledInt(new BigNumber(-5))
