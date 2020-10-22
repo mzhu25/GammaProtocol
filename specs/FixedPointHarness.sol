@@ -14,11 +14,6 @@ import '../contracts/libs/FixedPointInt256.sol';
 contract FixedPointHarness {
   using FixedPointInt256 for FixedPointInt256.FixedPointInt;
 
-  function expectedAdd(uint256 _a, uint256 _b) external pure returns (uint256) {
-    uint256 c = ((_a * (1e9)) + (_b * (1e9))) / (1e9);
-    return c;
-  }
-
   function testFPI(uint256 _a) external pure returns (uint256) {
     FixedPointInt256.FixedPointInt memory a = FixedPointInt256.fromScaledUint(_a, 18);
     return FixedPointInt256.toScaledUint(a, 18, true);
@@ -58,5 +53,20 @@ contract FixedPointHarness {
 
     FixedPointInt256.FixedPointInt memory c = a.mul(b);
     return c.toScaledUint(_decimals, true);
+  }
+
+  function testMulOverflow(
+    uint256 _a,
+    uint256 _b,
+    uint256 _decimals
+  ) external pure returns (bool) {
+    uint256 ascaled = _a * 10**(27 - _decimals);
+    uint256 bscaled = _b * 10**(27 - _decimals);
+
+    require(ascaled / 10**(27 - _decimals) == _a);
+    require(bscaled / 10**(27 - _decimals) == _b);
+    require((ascaled * bscaled) / ascaled == bscaled);
+
+    return true;
   }
 }

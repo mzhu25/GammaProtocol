@@ -2,8 +2,7 @@ methods {
     testAdd (uint256, uint256) returns uint256 envfree
     testSub (uint256, uint256) returns uint256 envfree
     testMul (uint256, uint256, uint256) returns uint256 envfree
-    expectedAdd (uint256, uint256) returns uint256 envfree
-    expectedMul (uint256, uint256, uint256) returns uint256 envfree
+    testMulOverflow (uint256, uint256, uint256) returns bool envfree
     testFPI (uint256) returns uint256 envfree
 }
 
@@ -14,13 +13,6 @@ description "test fpi"
 {
     uint256 c = sinvoke testFPI(a);
     assert a == c, "failed conversion test";
-}
-
-rule testExpectedAddition(uint256 a, uint256 b)
-description "test addition" 
-{
-    uint256 expected = sinvoke expectedAdd(a, b);
-    assert expected == a + b, "failed addition test";
 }
 
 rule testAddition(uint256 a, uint256 b)
@@ -40,7 +32,9 @@ description "test subtraction"
 rule testMultiplication(uint256 a, uint256 b)
 description "test multiplication" 
 {   
+    sinvoke testMulOverflow( a, b, 18);
     uint256 c = sinvoke testMul(a, b, 18);
-    uint256 expected = invoke expectedMul(a, b, 18);
-    assert c <= expected, "failed multiplication test";
+    mathint expected = (a * b) / 1000000000000000000;
+    
+    assert c == expected, "failed multiplication test";
 }
